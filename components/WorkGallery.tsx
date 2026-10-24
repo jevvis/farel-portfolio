@@ -154,7 +154,7 @@ export default function WorkGallery() {
       subtitle: t('work.1.sub'),
       description: t('work.1.desc'),
       tags: ['Penelaahan Berkas Perkara', 'Administrasi Perkara', 'Surat Dakwaan & Tuntutan', 'Keadilan Restoratif', 'Pasal 55 Ayat (1) KUHP', 'Tipidnum, Datun & Tipidsus', 'Forum Konsultasi Publik'],
-      images: ['/projects/sleman-group.jpg', '/projects/sleman-berkas.jpg', '/projects/sleman-borgol.jpg', '/projects/sleman-sidang.jpg'],
+      images: ['/projects/sleman-group.jpg', '/projects/sleman-borgol.jpg', '/projects/sleman-sidang.jpg'],
       align: 'right' as const,
     },
     {

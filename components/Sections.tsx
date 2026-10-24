@@ -1491,7 +1491,7 @@ export function TrainingsSection() {
                 title="Magang Kejari Sleman"
               >
                 <img
-                  src="/projects/sleman-berkas.jpg"
+                  src="/projects/sleman-sidang.jpg"
                   alt="Magang Kejari Sleman"
                   className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass([2])}`}
                 />
