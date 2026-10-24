@@ -14,7 +14,7 @@ const imageFocus: Record<string, string> = {
   '/projects/bi-tim.jpg': '50% 50%',
   '/projects/bi-gedung.jpg': '50% 50%',
   '/projects/bi-mahkamah-agung.jpg': '50% 50%',
-  '/projects/banjarnegara-berkas.jpg': '50% 35%',
+  '/projects/banjarnegara-rutan.jpg': '50% 50%',
   '/projects/banjarnegara-pn.jpg': '50% 60%',
 }
 
@@ -180,7 +180,7 @@ export default function WorkGallery() {
       subtitle: t('work.3.sub'),
       description: t('work.3.desc'),
       tags: ['Tindak Pidana Umum', 'Persiapan Berkas Perkara', 'Membantu JPU', 'Mencatat Jalannya Sidang', 'Pengarsipan Berkas', 'Laporan Kegiatan'],
-      images: ['/projects/banjarnegara-gedung.jpg', '/projects/banjarnegara-berkas.jpg', '/projects/banjarnegara-pn.jpg'],
+      images: ['/projects/banjarnegara-gedung.jpg', '/projects/banjarnegara-rutan.jpg', '/projects/banjarnegara-pn.jpg'],
       align: 'right' as const,
     },
   ]
