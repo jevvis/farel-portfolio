@@ -55,7 +55,7 @@ export default function Navbar() {
           }}
         >
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[var(--foreground)] flex items-center justify-center transition-transform group-hover:scale-105">
-            <span className="text-[var(--background)] font-serif text-sm italic font-bold">A</span>
+            <span className="text-[var(--background)] font-serif text-sm italic font-bold">F</span>
           </div>
           <span className="font-semibold text-xs sm:text-sm tracking-wider hidden sm:block">FAREL</span>
         </a>
