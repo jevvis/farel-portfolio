@@ -1517,11 +1517,11 @@ export function TrainingsSection() {
                 onMouseEnter={() => setHoveredOrgId(2)}
                 onMouseLeave={() => setHoveredOrgId(null)}
                 className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer ${getPhotoWrapperClass([2])}`}
-                title="Pameran Kampung Hukum"
+                title="Bank Indonesia"
               >
                 <img
-                  src="/projects/bi-kampung-hukum.jpg"
-                  alt="Pameran Kampung Hukum"
+                  src="/projects/bi-monumen.jpg"
+                  alt="Bank Indonesia"
                   className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass([2])}`}
                 />
               </div>

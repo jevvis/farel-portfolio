@@ -46,7 +46,7 @@ export const siteData = {
       location: 'Jakarta Pusat, DKI Jakarta',
       description:
         'Meninjau dan menyunting format terjemahan PADG No. 14 Tahun 2024, menyelaraskan terminologi dengan Glossarium Kumham, memperbarui metadata Peraturan Bank Indonesia di LIMS, mencocokkan data antara LIMS dan Sarah, serta mengikuti workshop Pameran Kampung Hukum di Mahkamah Agung.',
-      image: '/projects/bi-gedung.jpg',
+      image: '/projects/bi-monumen.jpg',
       link: '#',
     },
     {

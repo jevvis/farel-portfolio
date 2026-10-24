@@ -10,10 +10,10 @@ const imageFocus: Record<string, string> = {
   '/projects/sleman-tangga.jpg': '50% 50%',
   '/projects/sleman-kantor.jpg': '50% 50%',
   '/projects/sleman-plang.jpg': '50% 50%',
-  '/projects/bi-gedung.jpg': '50% 72%',
-  '/projects/bi-kampung-hukum.jpg': '50% 100%',
-  '/projects/bi-mahkamah-agung.jpg': '50% 8%',
-  '/projects/bi-kampung-interior.jpg': '50% 40%',
+  '/projects/bi-monumen.jpg': '50% 50%',
+  '/projects/bi-tim.jpg': '50% 50%',
+  '/projects/bi-gedung.jpg': '50% 50%',
+  '/projects/bi-mahkamah-agung.jpg': '50% 50%',
   '/projects/banjarnegara-berkas.jpg': '50% 35%',
   '/projects/banjarnegara-pn.jpg': '50% 60%',
 }
@@ -168,7 +168,7 @@ export default function WorkGallery() {
       subtitle: t('work.2.sub'),
       description: t('work.2.desc'),
       tags: ['PADG No. 14/2024', 'Glossarium Kumham', 'Metadata LIMS', 'Validasi Data LIMS–Sarah', 'Pameran Kampung Hukum', 'Mahkamah Agung RI'],
-      images: ['/projects/bi-gedung.jpg', '/projects/bi-kampung-hukum.jpg', '/projects/bi-mahkamah-agung.jpg', '/projects/bi-kampung-interior.jpg'],
+      images: ['/projects/bi-monumen.jpg', '/projects/bi-tim.jpg', '/projects/bi-gedung.jpg', '/projects/bi-mahkamah-agung.jpg'],
       align: 'left' as const,
     },
     {
