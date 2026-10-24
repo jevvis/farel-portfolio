@@ -34,7 +34,7 @@ export const siteData = {
       location: 'Sleman, DI Yogyakarta',
       description:
         'Mendukung penelaahan dan administrasi berkas perkara pada 3 bidang, mempelajari penyusunan Surat Dakwaan dan Surat Tuntutan, mengikuti Forum Konsultasi Publik, serta mempelajari penerapan keadilan restoratif.',
-      image: '/projects/sleman-group.jpg',
+      image: '/projects/sleman-plang.jpg',
       link: '#',
     },
     {

@@ -6,7 +6,9 @@ import { useLanguage } from '@/contexts/LanguageContext'
 
 // Titik fokus tiap foto (object-position) supaya wajah/tulisan penting tidak terpotong di rasio 16:9
 const imageFocus: Record<string, string> = {
-  '/projects/sleman-borgol.jpg': '50% 22%',
+  '/projects/sleman-tangga.jpg': '50% 25%',
+  '/projects/sleman-kantor.jpg': '50% 30%',
+  '/projects/sleman-plang.jpg': '50% 25%',
   '/projects/sleman-sidang.jpg': '50% 40%',
   '/projects/bi-gedung.jpg': '50% 72%',
   '/projects/bi-kampung-hukum.jpg': '50% 100%',
@@ -154,7 +156,7 @@ export default function WorkGallery() {
       subtitle: t('work.1.sub'),
       description: t('work.1.desc'),
       tags: ['Penelaahan Berkas Perkara', 'Administrasi Perkara', 'Surat Dakwaan & Tuntutan', 'Keadilan Restoratif', 'Pasal 55 Ayat (1) KUHP', 'Tipidnum, Datun & Tipidsus', 'Forum Konsultasi Publik'],
-      images: ['/projects/sleman-group.jpg', '/projects/sleman-borgol.jpg', '/projects/sleman-sidang.jpg'],
+      images: ['/projects/sleman-sidang.jpg', '/projects/sleman-tangga.jpg', '/projects/sleman-kantor.jpg', '/projects/sleman-plang.jpg'],
       align: 'right' as const,
     },
     {
