@@ -1,0 +1,267 @@
+'use client'
+
+import { useState } from 'react'
+import TypewriterTitle from './TypewriterTitle'
+import { useLanguage } from '@/contexts/LanguageContext'
+
+function InternshipImageStack({
+  images,
+  title,
+  align,
+}: {
+  images: string[]
+  title: string
+  align: 'left' | 'right'
+}) {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [isHovered, setIsHovered] = useState(false)
+
+  const handleNext = () => {
+    if (images.length > 1) {
+      setActiveIndex((prev) => (prev + 1) % images.length)
+    }
+  }
+
+  const isRight = align === 'right'
+  const xSign = isRight ? -1 : 1
+  const rotSign = isRight ? -1 : 1
+
+  return (
+    <div className="w-full relative pt-7 pb-3 px-3 select-none">
+      <div
+        className={`relative w-full aspect-video group ${images.length > 1 ? 'cursor-pointer' : ''}`}
+        onClick={handleNext}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {images.map((img, idx) => {
+          const offset = (idx - activeIndex + images.length) % images.length
+
+          let transformStyle = ''
+          let zIndex = 0
+          let opacity = 0
+          let filter = 'brightness(1)'
+
+          if (offset === 0) {
+            transformStyle = 'translate(0px, 0px) rotate(0deg) scale(1)'
+            zIndex = 20
+            opacity = 1
+            filter = 'brightness(1)'
+          } else if (offset === 1) {
+            const tx = isHovered ? xSign * 18 : xSign * 12
+            const ty = isHovered ? -18 : -12
+            const rot = isHovered ? rotSign * 4 : rotSign * 2.5
+            transformStyle = `translate(${tx}px, ${ty}px) rotate(${rot}deg) scale(0.97)`
+            zIndex = 10
+            opacity = 0.88
+            filter = isHovered ? 'brightness(0.92)' : 'brightness(0.82)'
+          } else if (offset === 2) {
+            const tx = isHovered ? xSign * 34 : xSign * 24
+            const ty = isHovered ? -34 : -24
+            const rot = isHovered ? rotSign * 8 : rotSign * 5
+            transformStyle = `translate(${tx}px, ${ty}px) rotate(${rot}deg) scale(0.94)`
+            zIndex = 5
+            opacity = 0.72
+            filter = isHovered ? 'brightness(0.82)' : 'brightness(0.68)'
+          }
+
+          return (
+            <div
+              key={idx}
+              className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl border border-[var(--card-border)] bg-[var(--card-bg)] transition-all duration-400 ease-out"
+              style={{
+                transform: transformStyle,
+                zIndex,
+                opacity,
+                filter,
+              }}
+            >
+              <img
+                src={img}
+                alt={`${title} - foto ${idx + 1}`}
+                draggable={false}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 pointer-events-none" />
+            </div>
+          )
+        })}
+
+        {/* Floating pill: Click to shuffle next */}
+        {images.length > 1 && (
+          <div className="absolute top-4 right-4 z-30 pointer-events-none">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 dark:bg-black/75 backdrop-blur-md border border-white/20 text-white text-[11px] font-medium shadow-lg">
+              <span>{activeIndex + 1} / {images.length}</span>
+              <span className="opacity-60">•</span>
+              <span className="text-[10px] opacity-80 group-hover:opacity-100 flex items-center gap-1">
+                Ganti foto
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Dots indicator at bottom */}
+        {images.length > 1 && (
+          <div className="absolute bottom-4 left-4 z-30 flex items-center gap-1.5 pointer-events-auto">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setActiveIndex(i)
+                }}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  i === activeIndex
+                    ? 'w-6 bg-emerald-500 shadow-md'
+                    : 'w-2 bg-white/50 hover:bg-white/80'
+                }`}
+                aria-label={`Lihat foto ${i + 1}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default function WorkGallery() {
+  const { t } = useLanguage()
+
+  const internships = [
+    {
+      number: '01',
+      role: t('work.1.role'),
+      institution: t('work.1.inst'),
+      location: t('work.1.loc'),
+      period: t('work.1.period'),
+      subtitle: t('work.1.sub'),
+      description: t('work.1.desc'),
+      tags: ['Legal Research', 'Penelaahan Berkas Perkara', 'Surat Dakwaan & Tuntutan', 'Keadilan Restoratif', 'Pasal 55 KUHP', 'Tipidnum & Tipidsus', 'Forum Konsultasi Publik'],
+      images: ['/projects/sleman-group.jpg', '/projects/sleman-berkas.jpg', '/projects/sleman-borgol.jpg', '/projects/sleman-sidang.jpg'],
+      align: 'right' as const,
+    },
+    {
+      number: '02',
+      role: t('work.2.role'),
+      institution: t('work.2.inst'),
+      location: t('work.2.loc'),
+      period: t('work.2.period'),
+      subtitle: t('work.2.sub'),
+      description: t('work.2.desc'),
+      tags: ['Review Regulasi PADG', 'Glossarium Kumham', 'Validasi Metadata LIMS', 'Sistem Sarah', 'Pameran Kampung Hukum', 'Mahkamah Agung RI'],
+      images: ['/projects/bi-kampung-hukum.jpg', '/projects/bi-mahkamah-agung.jpg', '/projects/bi-kampung-interior.jpg'],
+      align: 'left' as const,
+    },
+    {
+      number: '03',
+      role: t('work.3.role'),
+      institution: t('work.3.inst'),
+      location: t('work.3.loc'),
+      period: t('work.3.period'),
+      subtitle: t('work.3.sub'),
+      description: t('work.3.desc'),
+      tags: ['Hukum Pidana Umum', 'Persiapan Berkas Perkara', 'Pendampingan JPU', 'Persidangan', 'Pengarsipan Dokumen', 'Administrasi Kejaksaan'],
+      images: ['/projects/banjarnegara-gedung.jpg', '/projects/banjarnegara-berkas.jpg'],
+      align: 'right' as const,
+    },
+  ]
+
+  return (
+    <section id="work" className="relative py-24 px-4 md:px-8 overflow-hidden font-sans">
+      {/* Background Waves */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.1] z-0">
+        <svg className="w-full h-full" viewBox="0 0 1440 800" preserveAspectRatio="none" fill="none" stroke="currentColor">
+          <path d="M0 200C300 100 400 300 720 200C1040 100 1140 300 1440 200" strokeWidth="2" />
+          <path d="M0 400C300 300 400 500 720 400C1040 300 1140 500 1440 400" strokeWidth="2" />
+          <path d="M0 600C300 500 400 700 720 600C1040 500 1140 700 1440 600" strokeWidth="2" />
+        </svg>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6">
+          <div>
+            <p className="text-[10px] tracking-[0.3em] uppercase text-[var(--muted)] mb-4 font-semibold font-sans">
+              {t('work.label')}
+            </p>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight font-sans">
+              <TypewriterTitle text={t('work.title')} />
+            </h2>
+            <p className="text-[var(--muted)] text-sm md:text-base max-w-xl font-sans">
+              {t('work.subtitle')}
+            </p>
+          </div>
+          <a
+            href="/projects"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--foreground)] text-[var(--background)] text-xs font-semibold tracking-wider hover:opacity-90 transition-opacity shrink-0 w-max font-sans"
+          >
+            {t('work.cta')}
+          </a>
+        </div>
+
+        {/* Alternating Story Cards with Animated Stacked Photos */}
+        <div className="flex flex-col gap-24 lg:gap-32">
+          {internships.map((item, idx) => (
+            <div
+              key={idx}
+              className={`flex flex-col lg:flex-row gap-10 lg:gap-16 items-center ${
+                item.align === 'left' ? 'lg:flex-row-reverse' : ''
+              }`}
+            >
+              {/* Text Content */}
+              <div className="w-full lg:w-1/2 flex flex-col font-sans">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-xs font-sans font-bold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                    {item.number}
+                  </span>
+                  <span className="text-[11px] tracking-widest text-[var(--muted)] uppercase font-sans font-semibold">
+                    {item.period}
+                  </span>
+                </div>
+
+                <h3 className="text-2xl md:text-3xl font-bold text-[var(--foreground)] mb-1 font-sans">
+                  {item.institution}
+                </h3>
+                <h4 className="text-lg md:text-xl font-semibold text-emerald-500 mb-2 font-sans">
+                  {item.role}
+                </h4>
+                <p className="text-xs md:text-sm font-semibold text-[var(--muted)] mb-5 font-sans">
+                  {item.subtitle} • <span className="opacity-75">{item.location}</span>
+                </p>
+
+                <p className="text-[var(--muted)] text-sm leading-relaxed mb-6 text-justify font-sans">
+                  {item.description}
+                </p>
+
+                {/* Badges */}
+                <div className="flex flex-wrap gap-2">
+                  {item.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[10px] font-medium px-3 py-1.5 rounded-lg bg-[var(--card-bg)] border border-[var(--card-border)] text-[var(--foreground)] opacity-90 font-sans"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Stacked Animated Photos */}
+              <div className="w-full lg:w-1/2">
+                <InternshipImageStack
+                  images={item.images}
+                  title={item.institution}
+                  align={item.align}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

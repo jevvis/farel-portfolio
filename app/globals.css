@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f0f0f0;
+  --foreground: #0a0a0a;
+  --card-bg: #ffffff;
+  --card-border: #e5e5e5;
+  --muted: #737373;
+  --accent: #0a0a0a;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #f0f0f0;
+  --card-bg: #171717;
+  --card-border: #262626;
+  --muted: #a3a3a3;
+  --accent: #f0f0f0;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+section[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #52525b;
+  border-radius: 3px;
+}
+
+/* Text outline style for hero */
+.text-outline {
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 2px rgba(0, 0, 0, 0.15);
+}
+
+.dark .text-outline {
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.25);
+}
+
+/* Marquee pause on hover */
+.marquee-container:hover .animate-marquee,
+.marquee-container:hover .animate-marquee-reverse {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Prevent FOUC for theme */
+.theme-loading {
+  visibility: hidden;
+}
