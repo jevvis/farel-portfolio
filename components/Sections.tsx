@@ -1399,23 +1399,27 @@ export function TrainingsSection() {
     },
   ]
   // Helper untuk styling dinamis foto kolase sesuai kartu yang sedang disorot
-  const getPhotoWrapperClass = (photoOrgIds: number[]) => {
-    const isMatch = hoveredOrgId !== null && photoOrgIds.includes(hoveredOrgId)
+  const getPhotoWrapperClass = (targetOrgId: number) => {
+    const isMatch = hoveredOrgId === targetOrgId
     const isDimmed = hoveredOrgId !== null && !isMatch
     if (isMatch) {
-      return 'ring-2 ring-emerald-500 shadow-2xl scale-105 z-20 border-emerald-500/60 opacity-100'
+      return 'ring-2 ring-emerald-500 shadow-xl scale-[1.03] z-20 border-emerald-500/80 opacity-100'
     }
     if (isDimmed) {
-      return 'opacity-35 scale-[0.96] border-[var(--card-border)]/50'
+      return 'opacity-40 scale-[0.98] border-[var(--card-border)]/50'
     }
-    return 'opacity-90 scale-100 hover:opacity-100 hover:scale-105 border-[var(--card-border)] shadow-md'
+    return 'opacity-100 scale-100 hover:scale-[1.02] border-[var(--card-border)] shadow-sm'
   }
-  const getPhotoImageClass = (photoOrgIds: number[]) => {
-    const isMatch = hoveredOrgId !== null && photoOrgIds.includes(hoveredOrgId)
+  const getPhotoImageClass = (targetOrgId: number) => {
+    const isMatch = hoveredOrgId === targetOrgId
+    const isDimmed = hoveredOrgId !== null && !isMatch
     if (isMatch) {
-      return 'grayscale-0 brightness-105 contrast-105 scale-105'
+      return 'grayscale-0 brightness-105 contrast-105'
     }
-    return 'grayscale hover:grayscale-0'
+    if (isDimmed) {
+      return 'grayscale hover:grayscale-0'
+    }
+    return 'grayscale-0'
   }
   return (
     <section id="trainings" className="relative py-24 px-4 md:px-8 overflow-hidden font-sans">
@@ -1444,99 +1448,146 @@ export function TrainingsSection() {
         </div>
         {/* Content: Collage Grid (Left) + Organization Cards (Right) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-start">
-          {/* Left: Collage Grid (6 Photos connected to Organizations) */}
-          <div className="lg:col-span-5 grid grid-cols-3 gap-3 sm:gap-4 pr-0 lg:pr-4 sticky top-24 select-none">
-            {/* Kolom 1 */}
-            <div className="flex flex-col gap-3 sm:gap-4 -translate-y-4">
-              {/* Foto 1: Wisuda UII (orgId: 1) - klik untuk ganti foto */}
-              <div
-                onMouseEnter={() => setHoveredOrgId(1)}
-                onMouseLeave={() => setHoveredOrgId(null)}
-                onClick={() => setWisudaActiveIdx((prev) => (prev + 1) % wisudaPhotos.length)}
-                className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer relative group ${getPhotoWrapperClass([1])}`}
-                title="Klik untuk berganti foto wisuda"
-              >
-                <img
-                  src={wisudaPhotos[wisudaActiveIdx]}
-                  alt="Wisuda Sarjana Hukum UII"
-                  className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass([1])}`}
-                />
-                <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-black/65 backdrop-blur-md border border-white/20 text-white text-[9px] font-medium flex items-center gap-1 shadow-md pointer-events-none">
-                  <span>{wisudaActiveIdx + 1}/3</span>
-                  <span className="opacity-60">•</span>
-                  <span>Wisuda UII</span>
+          {/* Left: Collage Grid (6 Photos grouped cleanly by Theme) */}
+          <div className="lg:col-span-5 flex flex-col gap-5 sticky top-24 select-none font-sans">
+            {/* Baris 1: Tema Universitas Islam Indonesia (Kelulusan & Akademik) */}
+            <div
+              onMouseEnter={() => setHoveredOrgId(1)}
+              onMouseLeave={() => setHoveredOrgId(null)}
+              className={`p-3.5 rounded-3xl transition-all duration-300 border ${
+                hoveredOrgId === 1
+                  ? 'bg-emerald-500/5 border-emerald-500/30 shadow-md'
+                  : 'bg-[var(--card-bg)]/40 border-transparent'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-2.5 px-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--foreground)] flex items-center gap-2">
+                  <span
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      hoveredOrgId === 1 ? 'bg-emerald-500 scale-125 shadow-sm shadow-emerald-500' : 'bg-[var(--muted)]/50'
+                    }`}
+                  />
+                  Universitas Islam Indonesia
+                </span>
+                <span className="text-[10px] font-medium text-[var(--muted)]">Kelulusan & Akademik</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2.5">
+                {/* Foto 1: Wisuda UII Gordon (klik untuk ganti foto) */}
+                <div
+                  onClick={() => setWisudaActiveIdx((prev) => (prev + 1) % wisudaPhotos.length)}
+                  className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer relative group ${getPhotoWrapperClass(1)}`}
+                  title="Klik untuk berganti foto wisuda"
+                >
+                  <img
+                    src={wisudaPhotos[wisudaActiveIdx]}
+                    alt="Wisuda Sarjana Hukum UII"
+                    className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass(1)}`}
+                  />
+                  <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-black/65 backdrop-blur-md border border-white/20 text-white text-[8px] font-medium flex items-center gap-1 shadow-md pointer-events-none">
+                    <span>{wisudaActiveIdx + 1}/3</span>
+                    <span className="opacity-60">•</span>
+                    <span>Wisuda</span>
+                  </div>
+                </div>
+
+                {/* Foto 2: Wisuda UII Jas & Dasi */}
+                <div
+                  className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer relative ${getPhotoWrapperClass(1)}`}
+                  title="Sarjana Hukum UII"
+                >
+                  <img
+                    src="/projects/wisuda-uii-suit.jpg"
+                    alt="Sarjana Hukum UII"
+                    className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass(1)}`}
+                  />
+                  <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-[8px] font-medium shadow-md pointer-events-none">
+                    Sarjana Hukum
+                  </div>
+                </div>
+
+                {/* Foto 3: Kampus UII Tangga */}
+                <div
+                  className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer relative ${getPhotoWrapperClass(1)}`}
+                  title="Kampus UII"
+                >
+                  <img
+                    src="/projects/wisuda-uii-campus.jpg"
+                    alt="Kampus Universitas Islam Indonesia"
+                    className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass(1)}`}
+                  />
+                  <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-[8px] font-medium shadow-md pointer-events-none">
+                    Kampus UII
+                  </div>
                 </div>
               </div>
-              {/* Foto 2: Wisuda UII Jas (orgId: 1) */}
-              <div
-                onMouseEnter={() => setHoveredOrgId(1)}
-                onMouseLeave={() => setHoveredOrgId(null)}
-                className={`w-full aspect-square bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer ${getPhotoWrapperClass([1])}`}
-                title="Universitas Islam Indonesia"
-              >
-                <img
-                  src="/projects/wisuda-uii-suit.jpg"
-                  alt="Farel Rayhan Saputra - Sarjana Hukum UII"
-                  className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass([1])}`}
-                />
-              </div>
             </div>
-            {/* Kolom 2 */}
-            <div className="flex flex-col gap-3 sm:gap-4 translate-y-3">
-              {/* Foto 3: Magang Kejari Sleman (orgId: 2) */}
-              <div
-                onMouseEnter={() => setHoveredOrgId(2)}
-                onMouseLeave={() => setHoveredOrgId(null)}
-                className={`w-full aspect-square bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer ${getPhotoWrapperClass([2])}`}
-                title="Kejaksaan Negeri Sleman"
-              >
-                <img
-                  src="/projects/org-sleman.jpg"
-                  alt="Kejaksaan Negeri Sleman"
-                  className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass([2])}`}
-                />
+
+            {/* Baris 2: Tema Magang di Tiga Lembaga (Sleman, Bank Indonesia, Banjarnegara) */}
+            <div
+              onMouseEnter={() => setHoveredOrgId(2)}
+              onMouseLeave={() => setHoveredOrgId(null)}
+              className={`p-3.5 rounded-3xl transition-all duration-300 border ${
+                hoveredOrgId === 2
+                  ? 'bg-emerald-500/5 border-emerald-500/30 shadow-md'
+                  : 'bg-[var(--card-bg)]/40 border-transparent'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-2.5 px-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--foreground)] flex items-center gap-2">
+                  <span
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      hoveredOrgId === 2 ? 'bg-emerald-500 scale-125 shadow-sm shadow-emerald-500' : 'bg-[var(--muted)]/50'
+                    }`}
+                  />
+                  Magang di Tiga Lembaga
+                </span>
+                <span className="text-[10px] font-medium text-[var(--muted)]">Sleman • BI • Banjarnegara</span>
               </div>
-              {/* Foto 4: Magang Bank Indonesia (orgId: 2) */}
-              <div
-                onMouseEnter={() => setHoveredOrgId(2)}
-                onMouseLeave={() => setHoveredOrgId(null)}
-                className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer ${getPhotoWrapperClass([2])}`}
-                title="Bank Indonesia"
-              >
-                <img
-                  src="/projects/org-bi.jpg"
-                  alt="Bank Indonesia"
-                  className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass([2])}`}
-                />
-              </div>
-            </div>
-            {/* Kolom 3 */}
-            <div className="flex flex-col gap-3 sm:gap-4 -translate-y-6">
-              {/* Foto 5: Magang Kejari Banjarnegara (orgId: 2) */}
-              <div
-                onMouseEnter={() => setHoveredOrgId(2)}
-                onMouseLeave={() => setHoveredOrgId(null)}
-                className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer ${getPhotoWrapperClass([2])}`}
-                title="Kejaksaan Negeri Banjarnegara"
-              >
-                <img
-                  src="/projects/org-banjarnegara.jpg"
-                  alt="Kejaksaan Negeri Banjarnegara"
-                  className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass([2])}`}
-                />
-              </div>
-              {/* Foto 6: Wisuda UII Kampus (orgId: 1) */}
-              <div
-                onMouseEnter={() => setHoveredOrgId(1)}
-                onMouseLeave={() => setHoveredOrgId(null)}
-                className={`w-full aspect-square bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer ${getPhotoWrapperClass([1])}`}
-                title="Universitas Islam Indonesia"
-              >
-                <img
-                  src="/projects/wisuda-uii-campus.jpg"
-                  alt="Kampus Universitas Islam Indonesia"
-                  className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass([1])}`}
-                />
+              <div className="grid grid-cols-3 gap-2.5">
+                {/* Foto 4: Kejaksaan Negeri Sleman */}
+                <div
+                  className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer relative ${getPhotoWrapperClass(2)}`}
+                  title="Kejaksaan Negeri Sleman"
+                >
+                  <img
+                    src="/projects/org-sleman.jpg"
+                    alt="Kejaksaan Negeri Sleman"
+                    className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass(2)}`}
+                  />
+                  <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-[8px] font-medium shadow-md pointer-events-none">
+                    Kejari Sleman
+                  </div>
+                </div>
+
+                {/* Foto 5: Bank Indonesia */}
+                <div
+                  className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer relative ${getPhotoWrapperClass(2)}`}
+                  title="Bank Indonesia"
+                >
+                  <img
+                    src="/projects/org-bi.jpg"
+                    alt="Bank Indonesia"
+                    className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass(2)}`}
+                  />
+                  <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-[8px] font-medium shadow-md pointer-events-none">
+                    Bank Indonesia
+                  </div>
+                </div>
+
+                {/* Foto 6: Kejaksaan Negeri Banjarnegara */}
+                <div
+                  className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer relative ${getPhotoWrapperClass(2)}`}
+                  title="Kejaksaan Negeri Banjarnegara"
+                >
+                  <img
+                    src="/projects/org-banjarnegara.jpg"
+                    alt="Kejaksaan Negeri Banjarnegara"
+                    className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass(2)}`}
+                  />
+                  <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-[8px] font-medium shadow-md pointer-events-none">
+                    Banjarnegara
+                  </div>
+                </div>
               </div>
             </div>
           </div>
