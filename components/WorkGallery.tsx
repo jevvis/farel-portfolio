@@ -6,10 +6,10 @@ import { useLanguage } from '@/contexts/LanguageContext'
 
 // Titik fokus tiap foto (object-position) supaya wajah/tulisan penting tidak terpotong di rasio 16:9
 const imageFocus: Record<string, string> = {
-  '/projects/sleman-tangga.jpg': '50% 25%',
-  '/projects/sleman-kantor.jpg': '50% 30%',
-  '/projects/sleman-plang.jpg': '50% 25%',
-  '/projects/sleman-sidang.jpg': '50% 40%',
+  '/projects/sleman-sidang.jpg': '50% 50%',
+  '/projects/sleman-tangga.jpg': '50% 50%',
+  '/projects/sleman-kantor.jpg': '50% 50%',
+  '/projects/sleman-plang.jpg': '50% 50%',
   '/projects/bi-gedung.jpg': '50% 72%',
   '/projects/bi-kampung-hukum.jpg': '50% 100%',
   '/projects/bi-mahkamah-agung.jpg': '50% 8%',
