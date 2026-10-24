@@ -4,6 +4,18 @@ import { useState } from 'react'
 import TypewriterTitle from './TypewriterTitle'
 import { useLanguage } from '@/contexts/LanguageContext'
 
+// Titik fokus tiap foto (object-position) supaya wajah/tulisan penting tidak terpotong di rasio 16:9
+const imageFocus: Record<string, string> = {
+  '/projects/sleman-borgol.jpg': '50% 22%',
+  '/projects/sleman-sidang.jpg': '50% 40%',
+  '/projects/bi-gedung.jpg': '50% 72%',
+  '/projects/bi-kampung-hukum.jpg': '50% 100%',
+  '/projects/bi-mahkamah-agung.jpg': '50% 8%',
+  '/projects/bi-kampung-interior.jpg': '50% 40%',
+  '/projects/banjarnegara-berkas.jpg': '50% 35%',
+  '/projects/banjarnegara-pn.jpg': '50% 60%',
+}
+
 function InternshipImageStack({
   images,
   title,
@@ -81,6 +93,7 @@ function InternshipImageStack({
                 alt={`${title} - foto ${idx + 1}`}
                 draggable={false}
                 className="w-full h-full object-cover"
+                style={{ objectPosition: imageFocus[img] ?? '50% 50%' }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 pointer-events-none" />
             </div>

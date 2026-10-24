@@ -1009,7 +1009,7 @@ export function EducationSection() {
       gpaLabel: 'IPK S1',
       status: t('education.1.status'),
       description: t('education.1.desc'),
-      image: '/projects/wisuda-4.jpg',
+      image: '/projects/wisuda-7.jpg',
       imageTag: t('education.1.tag'),
       imageCaption: t('education.1.caption'),
       highlights: [
@@ -1119,7 +1119,7 @@ export function EducationSection() {
                     <img
                       src={edu.image}
                       alt={edu.program}
-                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover object-[50%_100%] sm:object-[50%_62%] lg:object-[50%_100%] group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
                     {/* Bottom: badges + caption, kept below the face */}
@@ -1475,9 +1475,9 @@ export function TrainingsSection() {
                 title="Wisuda UII"
               >
                 <img
-                  src="/projects/wisuda-2.jpg"
+                  src="/projects/wisuda-8.jpg"
                   alt="Wisuda Sarjana Hukum UII"
-                  className={`w-full h-full object-cover object-top transition-all duration-500 ${getPhotoImageClass([1])}`}
+                  className={`w-full h-full object-cover object-[50%_30%] transition-all duration-500 ${getPhotoImageClass([1])}`}
                 />
               </div>
             </div>
