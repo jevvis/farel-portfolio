@@ -77,12 +77,20 @@ function InternshipImageStack({
             zIndex = 5
             opacity = 0.72
             filter = isHovered ? 'brightness(0.82)' : 'brightness(0.68)'
+          } else {
+            const tx = isHovered ? xSign * 46 : xSign * 34
+            const ty = isHovered ? -46 : -34
+            const rot = isHovered ? rotSign * 10 : rotSign * 7
+            transformStyle = `translate(${tx}px, ${ty}px) rotate(${rot}deg) scale(0.90)`
+            zIndex = 1
+            opacity = 0
+            filter = 'brightness(0.5)'
           }
 
           return (
             <div
               key={idx}
-              className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl border border-[var(--card-border)] bg-[var(--card-bg)] transition-all duration-400 ease-out"
+              className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl border border-[var(--card-border)] bg-[var(--card-bg)] transition-all duration-700 ease-spring will-change-transform"
               style={{
                 transform: transformStyle,
                 zIndex,

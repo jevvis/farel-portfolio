@@ -156,7 +156,7 @@ export default function Hero() {
 
           {/* Interactive name pill at bottom */}
           <div
-            className={`absolute bottom-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none transition-all duration-400 ${
+            className={`absolute bottom-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none transition-all duration-500 ease-spring ${
               isHovered
                 ? 'opacity-100 translate-y-0 scale-100'
                 : 'opacity-0 translate-y-3 scale-95'

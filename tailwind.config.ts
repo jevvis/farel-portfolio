@@ -17,6 +17,18 @@ const config: Config = {
         marquee: 'marquee 30s linear infinite',
         'marquee-reverse': 'marquee-reverse 30s linear infinite',
       },
+      transitionDuration: {
+        '400': '400ms',
+        '600': '600ms',
+        '700': '700ms',
+        '800': '800ms',
+        '900': '900ms',
+      },
+      transitionTimingFunction: {
+        spring: 'cubic-bezier(0.25, 1, 0.5, 1)',
+        fluid: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        'bounce-soft': 'cubic-bezier(0.34, 1.25, 0.64, 1)',
+      },
       keyframes: {
         marquee: {
           '0%': { transform: 'translateX(0%)' },

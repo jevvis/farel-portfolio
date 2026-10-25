@@ -737,7 +737,7 @@ export function AboutSection() {
     setTimeout(() => {
       setActiveTraitIndex((prev) => (prev + 1) % traitsData.length);
       setIsSwiping(false);
-    }, 220);
+    }, 450);
   };
   const currentTrait = traitsData[activeTraitIndex];
   const nextTrait = traitsData[(activeTraitIndex + 1) % traitsData.length];
@@ -840,18 +840,22 @@ export function AboutSection() {
             >
               {/* Back Card 2 (Layer 3) */}
               <div 
-                className="absolute inset-0 bg-zinc-900/90 dark:bg-[#121316] rounded-3xl border border-white/5 shadow-xl transition-all duration-500 pointer-events-none"
+                className="absolute inset-0 bg-zinc-900/90 dark:bg-[#121316] rounded-3xl border border-white/5 shadow-xl transition-all duration-700 ease-spring pointer-events-none"
                 style={{
-                  transform: 'translate(20px, 16px) rotate(10deg) scale(0.92)',
-                  opacity: 0.35,
+                  transform: isSwiping
+                    ? 'translate(10px, 8px) rotate(5deg) scale(0.96)'
+                    : 'translate(20px, 16px) rotate(10deg) scale(0.92)',
+                  opacity: isSwiping ? 0.6 : 0.35,
                 }}
               />
               {/* Middle Card (Layer 2) */}
               <div 
-                className="absolute inset-0 bg-zinc-800/95 dark:bg-[#1A1C22] rounded-3xl border border-white/10 shadow-2xl transition-all duration-400 pointer-events-none p-6 flex flex-col justify-between"
+                className="absolute inset-0 bg-zinc-800/95 dark:bg-[#1A1C22] rounded-3xl border border-white/10 shadow-2xl transition-all duration-500 ease-spring pointer-events-none p-6 flex flex-col justify-between"
                 style={{
-                  transform: 'translate(10px, 8px) rotate(5deg) scale(0.96)',
-                  opacity: 0.7,
+                  transform: isSwiping
+                    ? 'translate(0px, 0px) rotate(0deg) scale(1)'
+                    : 'translate(10px, 8px) rotate(5deg) scale(0.96)',
+                  opacity: isSwiping ? 0.95 : 0.7,
                 }}
               >
                 <div className="flex items-center justify-between opacity-50">
@@ -864,10 +868,10 @@ export function AboutSection() {
               </div>
               {/* Front Card (Active Card) */}
               <div 
-                className="relative w-full min-h-[350px] bg-gradient-to-b from-zinc-800 via-zinc-900 to-zinc-950 dark:from-[#22242B] dark:via-[#1B1D23] dark:to-[#14151A] rounded-3xl border border-white/15 shadow-2xl p-6 sm:p-7 flex flex-col justify-between overflow-hidden transition-all duration-300 group-hover:border-emerald-500/40"
+                className="relative w-full min-h-[350px] bg-gradient-to-b from-zinc-800 via-zinc-900 to-zinc-950 dark:from-[#22242B] dark:via-[#1B1D23] dark:to-[#14151A] rounded-3xl border border-white/15 shadow-2xl p-6 sm:p-7 flex flex-col justify-between overflow-hidden transition-all duration-500 ease-spring will-change-transform group-hover:border-emerald-500/40"
                 style={{
                   transform: isSwiping
-                    ? 'translate(80px, -20px) rotate(20deg) scale(0.85)'
+                    ? 'translate(90px, -24px) rotate(16deg) scale(0.88)'
                     : 'translate(0px, 0px) rotate(0deg) scale(1)',
                   opacity: isSwiping ? 0 : 1,
                   boxShadow: `0 20px 40px -10px ${currentTrait.glow}, 0 10px 20px -5px rgba(0,0,0,0.5)`,
@@ -1313,7 +1317,7 @@ export function AwardsSection() {
               <div
                 key={item.id}
                 onClick={() => setActiveAwardIndex(index)}
-                className="absolute top-1/2 left-1/2 w-[70%] sm:w-[56%] md:w-[48%] lg:w-[42%] max-w-[490px] transition-all duration-500 ease-out select-none"
+                className="absolute top-1/2 left-1/2 w-[70%] sm:w-[56%] md:w-[48%] lg:w-[42%] max-w-[490px] transition-all duration-700 ease-spring will-change-transform select-none"
                 style={style}
               >
                 <div
@@ -1339,7 +1343,10 @@ export function AwardsSection() {
           })}
         </div>
         {/* Active certificate info - Berjarak Pas & Rapat di Bawah Foto */}
-        <div className="text-center mt-3 sm:mt-4 max-w-3xl mx-auto px-4 font-sans">
+        <div
+          key={activeAwardIndex}
+          className="text-center mt-3 sm:mt-4 max-w-3xl mx-auto px-4 font-sans transition-all duration-500 ease-spring"
+        >
           <p className="text-[11px] font-sans tracking-widest uppercase text-emerald-500 font-semibold mb-1.5">
             {activeAward.category}{activeAward.year && ` • ${activeAward.year}`}
           </p>
@@ -1453,15 +1460,22 @@ export function TrainingsSection() {
                 onMouseEnter={() => setHoveredOrgId(1)}
                 onMouseLeave={() => setHoveredOrgId(null)}
                 onClick={() => setWisudaActiveIdx((prev) => (prev + 1) % wisudaPhotos.length)}
-                className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer relative group ${getPhotoWrapperClass([1])}`}
+                className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 ease-spring cursor-pointer relative group ${getPhotoWrapperClass([1])}`}
                 title="Klik untuk berganti foto wisuda"
               >
-                <img
-                  src={wisudaPhotos[wisudaActiveIdx]}
-                  alt="Wisuda Sarjana Hukum UII"
-                  className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass([1])}`}
-                />
-                <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-black/65 backdrop-blur-md border border-white/20 text-white text-[9px] font-medium flex items-center gap-1 shadow-md pointer-events-none">
+                {wisudaPhotos.map((photo, pIdx) => (
+                  <img
+                    key={pIdx}
+                    src={photo}
+                    alt="Wisuda Sarjana Hukum UII"
+                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-spring ${getPhotoImageClass([1])} ${
+                      pIdx === wisudaActiveIdx
+                        ? 'opacity-100 scale-100 z-10'
+                        : 'opacity-0 scale-95 z-0 pointer-events-none'
+                    }`}
+                  />
+                ))}
+                <div className="absolute top-2.5 right-2.5 z-20 px-2 py-0.5 rounded-full bg-black/65 backdrop-blur-md border border-white/20 text-white text-[9px] font-medium flex items-center gap-1 shadow-md pointer-events-none">
                   <span>{wisudaActiveIdx + 1}/3</span>
                   <span className="opacity-60">•</span>
                   <span>Wisuda UII</span>
@@ -1472,13 +1486,13 @@ export function TrainingsSection() {
               <div
                 onMouseEnter={() => setHoveredOrgId(2)}
                 onMouseLeave={() => setHoveredOrgId(null)}
-                className={`w-full aspect-square bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer ${getPhotoWrapperClass([2])}`}
+                className={`w-full aspect-square bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 ease-spring cursor-pointer ${getPhotoWrapperClass([2])}`}
                 title="Kejaksaan Negeri Sleman"
               >
                 <img
                   src="/projects/org-sleman.jpg"
                   alt="Kejaksaan Negeri Sleman"
-                  className={`w-full h-full object-cover object-[50%_25%] transition-all duration-500 ${getPhotoImageClass([2])}`}
+                  className={`w-full h-full object-cover object-[50%_25%] transition-all duration-500 ease-spring ${getPhotoImageClass([2])}`}
                 />
               </div>
             </div>
@@ -1489,13 +1503,13 @@ export function TrainingsSection() {
               <div
                 onMouseEnter={() => setHoveredOrgId(1)}
                 onMouseLeave={() => setHoveredOrgId(null)}
-                className={`w-full aspect-square bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer ${getPhotoWrapperClass([1])}`}
+                className={`w-full aspect-square bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 ease-spring cursor-pointer ${getPhotoWrapperClass([1])}`}
                 title="Sarjana Hukum UII"
               >
                 <img
                   src="/projects/wisuda-uii-suit.jpg"
                   alt="Sarjana Hukum UII"
-                  className={`w-full h-full object-cover object-[50%_20%] transition-all duration-500 ${getPhotoImageClass([1])}`}
+                  className={`w-full h-full object-cover object-[50%_20%] transition-all duration-500 ease-spring ${getPhotoImageClass([1])}`}
                 />
               </div>
 
@@ -1503,13 +1517,13 @@ export function TrainingsSection() {
               <div
                 onMouseEnter={() => setHoveredOrgId(2)}
                 onMouseLeave={() => setHoveredOrgId(null)}
-                className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer ${getPhotoWrapperClass([2])}`}
+                className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 ease-spring cursor-pointer ${getPhotoWrapperClass([2])}`}
                 title="Bank Indonesia"
               >
                 <img
                   src="/projects/org-bi.jpg"
                   alt="Bank Indonesia"
-                  className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass([2])}`}
+                  className={`w-full h-full object-cover transition-all duration-500 ease-spring ${getPhotoImageClass([2])}`}
                 />
               </div>
             </div>
@@ -1520,13 +1534,13 @@ export function TrainingsSection() {
               <div
                 onMouseEnter={() => setHoveredOrgId(1)}
                 onMouseLeave={() => setHoveredOrgId(null)}
-                className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer ${getPhotoWrapperClass([1])}`}
+                className={`w-full aspect-[4/5] bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 ease-spring cursor-pointer ${getPhotoWrapperClass([1])}`}
                 title="Kampus Universitas Islam Indonesia"
               >
                 <img
                   src="/projects/wisuda-uii-campus.jpg"
                   alt="Kampus Universitas Islam Indonesia"
-                  className={`w-full h-full object-cover transition-all duration-500 ${getPhotoImageClass([1])}`}
+                  className={`w-full h-full object-cover transition-all duration-500 ease-spring ${getPhotoImageClass([1])}`}
                 />
               </div>
 
@@ -1534,13 +1548,13 @@ export function TrainingsSection() {
               <div
                 onMouseEnter={() => setHoveredOrgId(2)}
                 onMouseLeave={() => setHoveredOrgId(null)}
-                className={`w-full aspect-square bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer ${getPhotoWrapperClass([2])}`}
+                className={`w-full aspect-square bg-[var(--card-bg)] rounded-2xl overflow-hidden border transition-all duration-500 ease-spring cursor-pointer ${getPhotoWrapperClass([2])}`}
                 title="Kejaksaan Negeri Banjarnegara"
               >
                 <img
                   src="/projects/org-banjarnegara.jpg"
                   alt="Kejaksaan Negeri Banjarnegara"
-                  className={`w-full h-full object-cover object-[50%_20%] transition-all duration-500 ${getPhotoImageClass([2])}`}
+                  className={`w-full h-full object-cover object-[50%_20%] transition-all duration-500 ease-spring ${getPhotoImageClass([2])}`}
                 />
               </div>
             </div>
