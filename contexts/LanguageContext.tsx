@@ -40,7 +40,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // ── About Section
     'about.label': 'TENTANG SAYA',
-    'about.title': 'Sarjana Hukum. Analitis. Berorientasi Dokumen.',
+    'about.title': 'Sarjana Hukum. Universitas Islam Indonesia.',
     'about.ipk': 'IPK Sarjana',
     'about.toefl': 'Pengalaman Magang',
     'about.year': 'Publikasi Ilmiah',
@@ -248,7 +248,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // ── About Section
     'about.label': 'ABOUT ME',
-    'about.title': 'Law Graduate. Analytical. Document-Driven.',
+    'about.title': 'Law Graduate. Universitas Islam Indonesia.',
     'about.ipk': 'Bachelor GPA',
     'about.toefl': 'Internship Experiences',
     'about.year': 'Scientific Publication',

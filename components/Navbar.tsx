@@ -67,9 +67,9 @@ export default function Navbar() {
               key={link.label}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className="whitespace-nowrap text-[10.5px] xl:text-[11.5px] tracking-wider font-semibold px-2 py-1 rounded-full transition-all hover:text-[var(--foreground)] text-[var(--muted)] hover:bg-[var(--foreground)]/5"
+              className="nav-link whitespace-nowrap text-[10.5px] xl:text-[11.5px] tracking-wider font-semibold px-2 py-1 rounded-full transition-all hover:text-[var(--foreground)] text-[var(--muted)] hover:bg-[var(--foreground)]/5"
             >
-              {link.label}
+              <span className="nav-ul">{link.label}</span>
             </a>
           ))}
         </div>

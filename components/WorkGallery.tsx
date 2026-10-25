@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import TypewriterTitle from './TypewriterTitle'
 import { useLanguage } from '@/contexts/LanguageContext'
 
@@ -29,12 +29,29 @@ function InternshipImageStack({
 }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
+  // kartu depan "dibuang" (terlempar + memudar), lalu muncul lagi di belakang tanpa menyapu melintasi kartu lain
+  const [leavingIdx, setLeavingIdx] = useState<number | null>(null)
+  const [resetIdx, setResetIdx] = useState<number | null>(null)
+  const busy = useRef(false)
 
-  const handleNext = () => {
-    if (images.length > 1) {
-      setActiveIndex((prev) => (prev + 1) % images.length)
-    }
+  const goTo = (target: number) => {
+    if (images.length < 2 || busy.current || target === activeIndex) return
+    busy.current = true
+    const leaving = activeIndex
+    setLeavingIdx(leaving)
+    setActiveIndex(target)
+    window.setTimeout(() => {
+      setLeavingIdx(null)
+      setResetIdx(leaving) // lompat ke posisi belakang tanpa transisi, masih transparan
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          setResetIdx(null) // lalu muncul pelan di belakang
+          busy.current = false
+        })
+      )
+    }, 680)
   }
+  const handleNext = () => goTo((activeIndex + 1) % images.length)
 
   const isRight = align === 'right'
   const xSign = isRight ? -1 : 1
@@ -87,15 +104,29 @@ function InternshipImageStack({
             filter = 'brightness(0.5)'
           }
 
+          // fase animasi per kartu: dibuang -> lompat ke belakang (tanpa transisi) -> normal
+          let transition = 'transform 750ms cubic-bezier(0.25, 1, 0.5, 1), opacity 550ms ease, filter 550ms ease'
+          if (idx === leavingIdx) {
+            transformStyle = `translate(${-xSign * 150}px, -44px) rotate(${-rotSign * 15}deg) scale(0.9)`
+            zIndex = 30
+            opacity = 0
+            filter = 'brightness(1)'
+            transition = 'transform 680ms cubic-bezier(0.3, 0.7, 0.25, 1), opacity 520ms ease-in 120ms, filter 400ms ease'
+          } else if (idx === resetIdx) {
+            opacity = 0
+            transition = 'none'
+          }
+
           return (
             <div
               key={idx}
-              className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl border border-[var(--card-border)] bg-[var(--card-bg)] transition-all duration-700 ease-spring will-change-transform"
+              className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl border border-[var(--card-border)] bg-[var(--card-bg)] will-change-transform"
               style={{
                 transform: transformStyle,
                 zIndex,
                 opacity,
                 filter,
+                transition,
               }}
             >
               <img
@@ -112,7 +143,7 @@ function InternshipImageStack({
 
         {/* Floating pill: Click to shuffle next */}
         {images.length > 1 && (
-          <div className="absolute top-4 right-4 z-30 pointer-events-none">
+          <div className="absolute top-4 right-4 z-40 pointer-events-none">
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 dark:bg-black/75 backdrop-blur-md border border-white/20 text-white text-[11px] font-medium shadow-lg">
               <span>{activeIndex + 1} / {images.length}</span>
               <span className="opacity-60">•</span>
@@ -128,13 +159,13 @@ function InternshipImageStack({
 
         {/* Dots indicator at bottom */}
         {images.length > 1 && (
-          <div className="absolute bottom-4 left-4 z-30 flex items-center gap-1.5 pointer-events-auto">
+          <div className="absolute bottom-4 left-4 z-40 flex items-center gap-1.5 pointer-events-auto">
             {images.map((_, i) => (
               <button
                 key={i}
                 onClick={(e) => {
                   e.stopPropagation()
-                  setActiveIndex(i)
+                  goTo(i)
                 }}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   i === activeIndex

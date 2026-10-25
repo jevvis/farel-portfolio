@@ -730,16 +730,69 @@ export function AboutSection() {
     },
   ];
   const [activeTraitIndex, setActiveTraitIndex] = useState(0);
-  const [isSwiping, setIsSwiping] = useState(false);
+  // kartu depan dibuang (terlempar + memudar) sebagai lapisan sendiri, sementara kartu berikutnya naik ke depan
+  const [leavingTrait, setLeavingTrait] = useState<number | null>(null);
   const handleCardClick = () => {
-    if (isSwiping) return;
-    setIsSwiping(true);
-    setTimeout(() => {
-      setActiveTraitIndex((prev) => (prev + 1) % traitsData.length);
-      setIsSwiping(false);
-    }, 450);
+    if (leavingTrait !== null) return;
+    setLeavingTrait(activeTraitIndex);
+    setActiveTraitIndex((prev) => (prev + 1) % traitsData.length);
+    setTimeout(() => setLeavingTrait(null), 720);
   };
   const currentTrait = traitsData[activeTraitIndex];
+  const renderTraitCard = (trait: (typeof traitsData)[number], dotIdx: number, animation?: string) => (
+              <div 
+                className="relative w-full min-h-[350px] bg-gradient-to-b from-zinc-800 via-zinc-900 to-zinc-950 dark:from-[#22242B] dark:via-[#1B1D23] dark:to-[#14151A] rounded-3xl border border-white/15 shadow-2xl p-6 sm:p-7 flex flex-col justify-between overflow-hidden will-change-transform transition-colors duration-300 group-hover:border-emerald-500/40"
+                style={{
+                  boxShadow: `0 20px 40px -10px ${trait.glow}, 0 10px 20px -5px rgba(0,0,0,0.5)`,
+                  animation,
+                }}
+              >
+                {/* Header: ID + Badge + Icon */}
+                <div>
+                  <div className="flex items-center justify-between mb-5">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 border border-white/10 text-[10px] font-mono tracking-widest text-white/70">
+                      <span>{trait.id}</span>
+                      <span>/</span>
+                      <span>04</span>
+                    </span>
+                    <div className="w-10 h-10 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-white shrink-0 group-hover:scale-110 group-hover:bg-white/15 transition-all">
+                      {trait.icon}
+                    </div>
+                  </div>
+                  <p className="text-[9px] tracking-[0.25em] uppercase text-white/50 mb-1.5 font-semibold">
+                    {t('trait.card.label')}
+                  </p>
+                  <h3 className="text-3xl font-extrabold text-white tracking-tight mb-1">
+                    {trait.title}
+                  </h3>
+                  <p className="text-xs font-semibold text-emerald-400 mb-4 tracking-wide">
+                    {trait.subtitle}
+                  </p>
+                  <p className="text-xs text-white/70 leading-relaxed">
+                    {trait.desc}
+                  </p>
+                </div>
+                {/* Footer: Pagination dots & Click hint */}
+                <div className="pt-4 border-t border-white/10 mt-5 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    {traitsData.map((_, idx) => (
+                      <span
+                        key={idx}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          idx === dotIdx
+                            ? 'w-5 bg-emerald-400'
+                            : 'w-1.5 bg-white/20'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-1 text-[10px] tracking-wider uppercase font-semibold text-white/50 group-hover:text-emerald-400 transition-colors">
+                    <span>{t('trait.change')}</span>
+                    <span className="text-xs">↻</span>
+                  </div>
+                </div>
+              </div>
+  );
   const nextTrait = traitsData[(activeTraitIndex + 1) % traitsData.length];
   return (
     <section id="about" className="relative py-24 px-4 md:px-8 overflow-hidden">
@@ -840,22 +893,19 @@ export function AboutSection() {
             >
               {/* Back Card 2 (Layer 3) */}
               <div 
-                className="absolute inset-0 bg-zinc-900/90 dark:bg-[#121316] rounded-3xl border border-white/5 shadow-xl transition-all duration-700 ease-spring pointer-events-none"
+                className="absolute inset-0 bg-zinc-900/90 dark:bg-[#121316] rounded-3xl border border-white/5 shadow-xl pointer-events-none"
                 style={{
-                  transform: isSwiping
-                    ? 'translate(10px, 8px) rotate(5deg) scale(0.96)'
-                    : 'translate(20px, 16px) rotate(10deg) scale(0.92)',
-                  opacity: isSwiping ? 0.6 : 0.35,
+                  transform: 'translate(20px, 16px) rotate(10deg) scale(0.92)',
+                  opacity: 0.35,
                 }}
               />
               {/* Middle Card (Layer 2) */}
               <div 
-                className="absolute inset-0 bg-zinc-800/95 dark:bg-[#1A1C22] rounded-3xl border border-white/10 shadow-2xl transition-all duration-500 ease-spring pointer-events-none p-6 flex flex-col justify-between"
+                className="absolute inset-0 bg-zinc-800/95 dark:bg-[#1A1C22] rounded-3xl border border-white/10 shadow-2xl pointer-events-none p-6 flex flex-col justify-between"
                 style={{
-                  transform: isSwiping
-                    ? 'translate(0px, 0px) rotate(0deg) scale(1)'
-                    : 'translate(10px, 8px) rotate(5deg) scale(0.96)',
-                  opacity: isSwiping ? 0.95 : 0.7,
+                  transform: 'translate(10px, 8px) rotate(5deg) scale(0.96)',
+                  opacity: 0.7,
+                  animation: leavingTrait !== null ? 'deckFade 0.8s ease both' : undefined,
                 }}
               >
                 <div className="flex items-center justify-between opacity-50">
@@ -866,62 +916,16 @@ export function AboutSection() {
                   {nextTrait.subtitle}
                 </div>
               </div>
-              {/* Front Card (Active Card) */}
-              <div 
-                className="relative w-full min-h-[350px] bg-gradient-to-b from-zinc-800 via-zinc-900 to-zinc-950 dark:from-[#22242B] dark:via-[#1B1D23] dark:to-[#14151A] rounded-3xl border border-white/15 shadow-2xl p-6 sm:p-7 flex flex-col justify-between overflow-hidden transition-all duration-500 ease-spring will-change-transform group-hover:border-emerald-500/40"
-                style={{
-                  transform: isSwiping
-                    ? 'translate(90px, -24px) rotate(16deg) scale(0.88)'
-                    : 'translate(0px, 0px) rotate(0deg) scale(1)',
-                  opacity: isSwiping ? 0 : 1,
-                  boxShadow: `0 20px 40px -10px ${currentTrait.glow}, 0 10px 20px -5px rgba(0,0,0,0.5)`,
-                }}
-              >
-                {/* Header: ID + Badge + Icon */}
-                <div>
-                  <div className="flex items-center justify-between mb-5">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 border border-white/10 text-[10px] font-mono tracking-widest text-white/70">
-                      <span>{currentTrait.id}</span>
-                      <span>/</span>
-                      <span>04</span>
-                    </span>
-                    <div className="w-10 h-10 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-white shrink-0 group-hover:scale-110 group-hover:bg-white/15 transition-all">
-                      {currentTrait.icon}
-                    </div>
-                  </div>
-                  <p className="text-[9px] tracking-[0.25em] uppercase text-white/50 mb-1.5 font-semibold">
-                    {t('trait.card.label')}
-                  </p>
-                  <h3 className="text-3xl font-extrabold text-white tracking-tight mb-1">
-                    {currentTrait.title}
-                  </h3>
-                  <p className="text-xs font-semibold text-emerald-400 mb-4 tracking-wide">
-                    {currentTrait.subtitle}
-                  </p>
-                  <p className="text-xs text-white/70 leading-relaxed">
-                    {currentTrait.desc}
-                  </p>
-                </div>
-                {/* Footer: Pagination dots & Click hint */}
-                <div className="pt-4 border-t border-white/10 mt-5 flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    {traitsData.map((_, idx) => (
-                      <span
-                        key={idx}
-                        className={`h-1.5 rounded-full transition-all duration-300 ${
-                          idx === activeTraitIndex
-                            ? 'w-5 bg-emerald-400'
-                            : 'w-1.5 bg-white/20'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-1 text-[10px] tracking-wider uppercase font-semibold text-white/50 group-hover:text-emerald-400 transition-colors">
-                    <span>{t('trait.change')}</span>
-                    <span className="text-xs">↻</span>
-                  </div>
-                </div>
+              {/* Front Card (Active Card): kartu baru naik ke depan dari posisi kartu tengah */}
+              <div key={`front-${activeTraitIndex}`}>
+                {renderTraitCard(currentTrait, activeTraitIndex, leavingTrait !== null ? 'deckRise 0.8s cubic-bezier(0.25, 1, 0.5, 1) both' : undefined)}
               </div>
+              {/* Kartu yang dibuang: terlempar ke kanan-atas sambil memudar */}
+              {leavingTrait !== null && (
+                <div className="absolute inset-0 pointer-events-none z-30" aria-hidden="true">
+                  {renderTraitCard(traitsData[leavingTrait], leavingTrait, 'deckThrow 0.72s cubic-bezier(0.25, 0.8, 0.3, 1) both')}
+                </div>
+              )}
             </div>
           </div>
         </div>
